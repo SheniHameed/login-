@@ -1,14 +1,16 @@
 import React, { useState} from "react";
 import "./loginform.css"
-
+import { useDispatch } from "react-redux";
+import { signInUser } from "../redux/authSlice";
 const LoginForm =()=>{
     const [username,setusername]=useState("");
 const [password,setpassword]=useState("");
+const dispatch= useDispatch()
 
 const LoginFormHandle=()=>{
 
-    console.table({username,password})
-
+    console.table(username,password)
+    dispatch(signInUser({username,password}))
 }
     return (<div>
 <div className="flex flex-colum align-items-center">
