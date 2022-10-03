@@ -6,8 +6,8 @@ const initialState={
     loading:false,
     error:""
 }
-export const signUpUser=createAsyncThunk('signUpUser',async(body)=>{
-    const res =await fetch("dddddddddddddddd",
+export const signInUser=createAsyncThunk('signinUser',async(body)=>{
+    const res =await fetch('http://localhost:3000',
     {
     method:"post",
     headers:{'Content-Type':"application/json",
@@ -22,24 +22,38 @@ const authSlice=createSlice({
     name:'user',
     initialState,
     reducers:{
-
+addToken:(state,action)=>{
+    state.token= localStorage.getItem("token")
+},
+addUser:(state,action)=>{
+        state.user= localStorage.getItem("user") },
+    logout:(state,action)=>{
+        state.token=null;
+        localStorage.clear();}
     },
     extraReducers:{
-[signUpUser.pending]:(state,action)=>
+[signInUser.pending]:(state,action)=>
 {state.loading=true},
-[signUpUser.fulfilled]:(state,{payload:{error,msg}})=>
+[signInUser.fulfilled]:(state,{payload:{error,msg,token,user}})=>
 {state.loading=false; 
     if (error) 
      {
     state.error=error}
 
-    else {state.msg=msg
+    else {state.msg=msg;
+        state.token=token;
+        state.user=user;
+        localStorage.setitem('msg',msg)
+        localStorage.setitem('user',JSON.stringify(user))
+        localStorage.setitem('token',token)
 }
 },
-[signUpUser.rejected]:(state,action)=>
+[signInUser.rejected]:(state,action)=>
 {state.loading=true}
     }
 
 })
+export const{addToken,addUser,logout}=authSlice.actions;
 export default authSlice.reducer
+
 
